@@ -25,9 +25,9 @@ This project is a movie information app that displays a list of movies from The 
 - Genre filter to display movies of selected genres.
 - Smooth scrolling behavior with debounce and throttle implementations.
 - Shimmer effect for movie list loading state.
-  -Implemented a search bar which searches for the movie based on the search string
+-Implemented a search bar which searches for the movie based on the search string
   and displays an infinite loading list of movies which matches the search.
-  -Used TypeScript for enhanced type safety and code quality.
+-Used TypeScript for enhanced type safety and code quality.
 
 ## Installation
 
