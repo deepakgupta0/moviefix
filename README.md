@@ -23,10 +23,9 @@ This project is a movie information app that displays a list of movies from The 
 - Show movie details.
 - Infinite scrolling to load movies from previous and next years as the user scrolls.
 - Genre filter to display movies of selected genres.
-- Smooth scrolling behavior with debounce and throttle implementations.
+- Smooth scrolling behavior with throttle implementations.
 - Shimmer effect for movie list loading state.
-- Implemented a search bar which searches for the movie based on the search string
-  and displays an infinite loading list of movies which matches the search.
+- Implemented a debounced search bar which searches for the movie based on the search string and displays an infinite loading list of movies which matches the search.
 - Used TypeScript for enhanced type safety and code quality.
 
 ## Installation
@@ -62,12 +61,14 @@ This project is a movie information app that displays a list of movies from The 
 - **MovieCard**: Displays movie details.
 - **GenreFilter**: Allows users to filter movies by genre.
 - **SkeletonLoader**: Displays a shimmer effect for loading state.
+- **SearchBar**: Displays search input.
 
 ## Hooks
 
 - **useDebounce**: Custom hook to debounce function calls.
 - **useThrottle**: Custom hook to throttle function calls.
 - **useInfiniteScroll**: Custom hook to handle infinite scrolling.
+- **useUpdateEffect**: Custom hook to only listen update phase on given dependencies(using this we are ignoring mounting phase effects).
 
 ## Styling
 
