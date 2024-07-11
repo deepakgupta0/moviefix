@@ -1,0 +1,7 @@
+.header{
+    color: var(--chip-bg-active);
+    text-transform: uppercase;
+    font-weight: 800;
+    font-size: 1.5rem;
+    z-index: 2;
+}

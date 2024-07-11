@@ -1,0 +1,18 @@
+.search-bar {
+    padding-top: 0;
+    width: 100%;
+}
+
+.search-input {
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  width: 100%;
+  outline: none;
+}
+
+@media (min-width: 768px) {
+    .search-input{
+        width: 400px;
+    }
+}
