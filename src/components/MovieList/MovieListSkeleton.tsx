@@ -9,4 +9,4 @@ const MovieListSkeleton: React.FC<MovieListSkeletonProps> = ({ count }) => {
   })}</div>;
 };
 
-export default MovieListSkeleton;
+export default React.memo(MovieListSkeleton);

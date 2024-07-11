@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import useDebounce from "../../hooks/useDebounce";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll";
+import useUpdateEffect from "../../hooks/useUpdateEffect";
 import { fetchMovies } from "../../services/api";
 import { Movie } from "../../types";
 import MovieCard from "../MovieCard/MovieCard";
+import VirtualScroll from "../VirtualScroll/VirtualScroll";
 import "./MovieList.css";
-import useUpdateEffect from "../../hooks/useUpdateEffect";
 import MovieListSkeleton from "./MovieListSkeleton";
-import useDebounce from "../../hooks/useDebounce";
 
 interface MovieListProps {
   genres: Set<number>;
@@ -25,8 +26,10 @@ const MovieList: React.FC<MovieListProps> = ({ genres, searchQuery }) => {
   const [year, setYear] = useState([2012]);
   const [direction, setDirection] = useState<"up" | "down">("down");
   const [page, setPage] = useState(1);
-  let debouncedSearch = useDebounce(searchQuery, 500);
   const [isLimitReached, setIsLimitReached] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [movieSetHeight,setMovieSetHeight] = useState(0);
+  let debouncedSearch = useDebounce(searchQuery, 500);
 
   const fetchMoreMovies = (direction: "up" | "down") => {
     if (!upLoading && direction === "up" && searchQuery?.length === 0) {
@@ -43,7 +46,7 @@ const MovieList: React.FC<MovieListProps> = ({ genres, searchQuery }) => {
     }
   };
 
-  useInfiniteScroll(fetchMoreMovies);
+  useInfiniteScroll(fetchMoreMovies,containerRef);
 
   const fetchData = async(direction:"up"|"down", cyear:number)=>{
     const {
@@ -77,16 +80,15 @@ const MovieList: React.FC<MovieListProps> = ({ genres, searchQuery }) => {
       };
     });
 
-
   }
   const loadMovies = async (cyear: number[], direction: "up" | "down") => {
     try {
       if (direction === "down" && !isLimitReached) {
         setDownLoading(true);
-        fetchData(direction,cyear[cyear.length - 1]);
+        await fetchData(direction,cyear[cyear.length - 1]);
       } else if(direction === "up") {
         setUpLoading(true);
-        fetchData(direction,cyear[0]);
+        await fetchData(direction,cyear[0]);
       }
     } catch (error) {
     } finally {
@@ -113,14 +115,15 @@ const MovieList: React.FC<MovieListProps> = ({ genres, searchQuery }) => {
     <div className="movie-list-container">
       {upLoading && (
         <div className="loading">
-          <MovieListSkeleton count={4} />
+          <MovieListSkeleton count={12} />
         </div>
       )}
       {(genres?.size > 0 && (movies?.[0]?.movies === null || movies?.[0]?.movies?.length === 0)) ? <div>No Such Movie Exists With Such Combination Of Genre</div>:<></>}
-      {movies.map((set) => {
+
+      <VirtualScroll items={movies.map((set,idx) => {
         return (
           set.movies?.length > 0 && (
-            <div className="movie-set" key={set.year}>
+            <div className="movie-set" key={set.year ?? idx} ref={(ele)=>{ if(ele && idx === 0) setMovieSetHeight((ele?.clientHeight ?? 0) + 10)}}>
               {set.year && <h4 className="movie-year">{set.year}</h4>}
               <div className="movie-list">
                 {set.movies.map((movie) => {
@@ -134,10 +137,11 @@ const MovieList: React.FC<MovieListProps> = ({ genres, searchQuery }) => {
             </div>
           )
         );
-      })}
+      })} itemHeight={movieSetHeight} containerRef={containerRef}/>
+      
       {downLoading && (
         <div className="loading">
-          <MovieListSkeleton count={4} />
+          <MovieListSkeleton count={12} />
         </div>
       )}
     </div>

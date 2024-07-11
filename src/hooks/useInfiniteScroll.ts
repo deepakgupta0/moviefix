@@ -1,22 +1,26 @@
 import { useEffect } from "react";
 import useThrottle from "./useThrottle";
 
-const useInfiniteScroll = (callback: (direction: "up" | "down") => void) => {
+const useInfiniteScroll = (
+  callback: (direction: "up" | "down") => void,
+  containerRef: React.RefObject<HTMLDivElement>
+) => {
   const throttledScroll = useThrottle(() => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (!containerRef.current) return;
+    const scrollTop = containerRef.current.scrollTop;
+    const scrollHeight = containerRef.current.scrollHeight;
+    const clientHeight = containerRef.current.clientHeight;
 
-    if (
-      window.innerHeight + scrollTop >=
-      document.documentElement.offsetHeight - 1
-    ) {
+    if (scrollTop + clientHeight >= scrollHeight) {
       callback("down");
     } else if (scrollTop === 0) {
       callback("up");
     }
-  }, 400);
+  }, 500);
   useEffect(() => {
-    window.addEventListener("scroll", throttledScroll);
-    return () => window.removeEventListener("scroll", throttledScroll);
+    containerRef.current?.addEventListener("scroll", throttledScroll);
+    return () =>
+      containerRef.current?.removeEventListener("scroll", throttledScroll);
   }, [throttledScroll]);
 };
 

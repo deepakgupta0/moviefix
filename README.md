@@ -27,6 +27,7 @@ This project is a movie information app that displays a list of movies from The 
 - Shimmer effect for movie list loading state.
 - Implemented a debounced search bar which searches for the movie based on the search string and displays an infinite loading list of movies which matches the search.
 - Used TypeScript for enhanced type safety and code quality.
+- Added Custom Virtual Scrolling for better rendering
 
 ## Installation
 
@@ -62,6 +63,7 @@ This project is a movie information app that displays a list of movies from The 
 - **GenreFilter**: Allows users to filter movies by genre.
 - **SkeletonLoader**: Displays a shimmer effect for loading state.
 - **SearchBar**: Displays search input.
+- **VirtualScroll**: Custom Static Height Virtual Scroller.
 
 ## Hooks
 
